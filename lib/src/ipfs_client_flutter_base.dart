@@ -25,7 +25,7 @@ class IpfsClient {
           params: params,
           authorizationToken:
               "dTB4NGpvYzJrcDpDSFZGQWdSMU9xSW5GOC13UzA5MmRjQThXZUhqTy1VOW5GcHU4bW8xMnpF");
-      return response.data;
+      return response;
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.

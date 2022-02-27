@@ -51,7 +51,7 @@ class IpfsService {
               "Basic $authorizationToken",
             },
           ));
-      return response.data;
+      return response.statusCode;
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
