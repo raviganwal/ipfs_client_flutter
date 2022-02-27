@@ -21,7 +21,7 @@ class IpfsClient {
     };
     try {
       var response = await _ipfsService.post(
-          url: '$url/api/v0/files/write?',
+          url: '$url/api/v0/files/mkdir?',
           params: params,
           authorizationToken:
               "dTB4NGpvYzJrcDpDSFZGQWdSMU9xSW5GOC13UzA5MmRjQThXZUhqTy1VOW5GcHU4bW8xMnpF");
