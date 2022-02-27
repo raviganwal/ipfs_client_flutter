@@ -20,7 +20,7 @@ class IpfsClient {
       'arg': path,
     };
     try {
-      Response response = await _ipfsService.post(
+      var response = await _ipfsService.post(
           url: '$url/api/v0/files/write?',
           params: params,
           authorizationToken:
