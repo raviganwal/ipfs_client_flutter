@@ -19,17 +19,27 @@ class IpfsService {
     // };
   }
 
-  Future<dynamic> postFile(String url, var params, var authorizationToken) async {
+  Future<dynamic> postFile(
+      {required String url,
+      var queryParameters,
+      var formData,
+      var authorizationToken}) async {
     try {
-      Response response = await dio.post(url,
-          queryParameters: params,
-          options: Options(
-            headers: {
-              "Authorization":
-                  "Basic $authorizationToken",
-              "Content-Disposition": "form-data",
-            },
-          ));
+      Response response = await dio.post(
+        url,
+        data: formData,
+        queryParameters: queryParameters,
+        options: Options(
+          headers: {
+            "Authorization": "Basic $authorizationToken",
+          },
+        ),
+        onSendProgress: (received, total) {
+          if (total != -1) {
+            print((received / total * 100).toStringAsFixed(0) + '%');
+          }
+        },
+      );
       return response.data;
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
@@ -40,18 +50,17 @@ class IpfsService {
     }
   }
 
-
-  Future<dynamic> post({String? url, var params, var authorizationToken}) async {
+  Future<dynamic> post(
+      {String? url, var queryParameters, var authorizationToken}) async {
     try {
       Response response = await dio.post(url!,
-          queryParameters: params,
+          queryParameters: queryParameters,
           options: Options(
             headers: {
-              "Authorization":
-              "Basic $authorizationToken",
+              "Authorization": "Basic $authorizationToken",
             },
           ));
-      return response.statusCode;
+      return {"statusCode": response.statusCode, "data": response};
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
