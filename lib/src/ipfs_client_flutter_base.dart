@@ -57,8 +57,8 @@ class IpfsClient {
     }
   }
 
-  /// List directories in the local mutable namespace.
-  /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-ls
+  /// Display file status.
+  /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-stat
   Future<dynamic> stat(
       {String? dir = "/", Map<String, dynamic> params = const {}}) async {
     if (dir != null && !dir.startsWith("/")) dir = "/$dir";
