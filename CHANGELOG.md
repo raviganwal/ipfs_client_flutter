@@ -2,3 +2,4 @@
 
 - implemented "stat" method and also renamed "ls" mehtod.
 - read
+- move a file
