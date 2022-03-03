@@ -14,7 +14,7 @@ class IpfsClient {
   /// Make a directory in IPFS
   /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-mkdir
   Future<dynamic> mkdir({required String dir}) async {
-    if (!dir.startsWith("/")) dir = "/$dir";
+    _checkDir(dir);
     var params = {
       'arg': dir,
       'parent': true,
@@ -36,8 +36,8 @@ class IpfsClient {
 
   /// List directories in the local mutable namespace.
   /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-ls
-  Future<dynamic> ls({String? dir = "/"}) async {
-    if (dir != null && !dir.startsWith("/")) dir = "/$dir";
+  Future<dynamic> ls({required String dir}) async {
+    _checkDir(dir);
     var params = {
       'arg': dir,
       'long': true,
@@ -61,8 +61,8 @@ class IpfsClient {
   /// Display file status.
   /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-stat
   Future<dynamic> stat(
-      {String? dir = "/", Map<String, dynamic> params = const {}}) async {
-    if (dir != null && !dir.startsWith("/")) dir = "/$dir";
+      {required String dir, Map<String, dynamic> params = const {}}) async {
+    _checkDir(dir);
     var _params = {'arg': dir, ...params};
     try {
       var response = await _ipfsService.post(
@@ -85,7 +85,7 @@ class IpfsClient {
       {required String dir,
       required String filePath,
       String fileName = ""}) async {
-    if (!dir.startsWith("/")) dir = "/$dir";
+    _checkDir(dir);
     var params = {
       'arg': dir,
       'create': true,
@@ -93,7 +93,7 @@ class IpfsClient {
     try {
       var response = await _ipfsService.postFile(
           url: '$url/api/v0/files/write?',
-          formData: await getFormData(filePath, fileName),
+          formData: await _getFormData(filePath, fileName),
           queryParameters: params,
           authorizationToken: authorizationToken);
       return response;
@@ -108,8 +108,8 @@ class IpfsClient {
 
   /// Read a file in a given MFS.
   /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-read
-  Future<dynamic> read({String? dir = "/"}) async {
-    if (dir != null && !dir.startsWith("/")) dir = "/$dir";
+  Future<dynamic> read({ required String dir}) async {
+    _checkDir(dir);
     var params = {
       'arg': dir,
       'offset': 0,
@@ -133,8 +133,8 @@ class IpfsClient {
 
   /// Remove a file/dir
   /// https://docs.ipfs.io/reference/http/api/#api-v0-files-rm
-  Future<dynamic> remove({String? dir = "/"}) async {
-    if (dir != null && !dir.startsWith("/")) dir = "/$dir";
+  Future<dynamic> remove({required String dir}) async {
+    _checkDir(dir);
     var params = {
       'arg': dir,
     };
@@ -153,12 +153,32 @@ class IpfsClient {
     }
   }
 
-  String checkDir(String dir) {
+  /// move a file/mv
+  /// https://docs.ipfs.io/reference/http/api/#api-v0-files-mv
+  Future<dynamic> mv({required String oldPath, required String newPath}) async {
+    _checkDir(oldPath);
+    _checkDir(newPath);
+    try {
+      var response = await _ipfsService.post(
+          url: '$url/api/v0/files/mv?arg=$oldPath&arg=$newPath',
+          // queryParameters: params,
+          authorizationToken: authorizationToken);
+      return response;
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      if (e.response != null) {
+        return e.response?.data;
+      }
+    }
+  }
+
+  String _checkDir(String dir) {
     if (!dir.startsWith("/")) return dir = "/$dir";
     return dir;
   }
 
-  Future<FormData> getFormData(String filePath, String fileName) async {
+  Future<FormData> _getFormData(String filePath, String fileName) async {
     return FormData.fromMap({
       'file': await MultipartFile.fromFile(
         filePath,
