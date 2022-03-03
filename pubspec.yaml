@@ -1,7 +1,7 @@
 name: ipfs_client_flutter
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
-# homepage: https://www.example.com
+description: Built on top of HTTP RPC API.
+version: 1.0.3
+homepage: https://github.com/raviganwal/ipfs_client_flutter.git
 
 environment:
   sdk: '>=2.16.1 <3.0.0'

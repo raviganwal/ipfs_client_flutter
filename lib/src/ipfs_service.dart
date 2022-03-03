@@ -51,16 +51,20 @@ class IpfsService {
   }
 
   Future<dynamic> post(
-      {String? url, var queryParameters, var authorizationToken}) async {
+      {String? url,
+      var queryParameters,
+      var authorizationToken,
+      ResponseType responseType = ResponseType.plain}) async {
     try {
       Response response = await dio.post(url!,
           queryParameters: queryParameters,
           options: Options(
+            responseType: responseType,
             headers: {
               "Authorization": "Basic $authorizationToken",
             },
           ));
-      return {"statusCode": response.statusCode, "data": response};
+      return {"statusCode": response.statusCode, "data": response.data};
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.

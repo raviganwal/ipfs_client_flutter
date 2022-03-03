@@ -17,16 +17,19 @@ class IpfsClient {
     if (!dir.startsWith("/")) dir = "/$dir";
     var params = {
       'arg': dir,
+      'parent': true,
     };
     try {
       var response = await _ipfsService.post(
           url: '$url/api/v0/files/mkdir?',
           queryParameters: params,
           authorizationToken: authorizationToken);
+      print("step 1");
       return response;
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
+      print("step 2");
       if (e.response != null) {
         return e.response?.data;
       }
@@ -35,7 +38,7 @@ class IpfsClient {
 
   /// List directories in the local mutable namespace.
   /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-ls
-  Future<dynamic> getAllDirectories({String? dir="/"}) async {
+  Future<dynamic> getAllDirectories({String? dir = "/"}) async {
     if (dir != null && !dir.startsWith("/")) dir = "/$dir";
     var params = {
       'arg': dir,
@@ -72,6 +75,53 @@ class IpfsClient {
       var response = await _ipfsService.postFile(
           url: '$url/api/v0/files/write?',
           formData: await getFormData(filePath, fileName),
+          queryParameters: params,
+          authorizationToken: authorizationToken);
+      return response;
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      if (e.response != null) {
+        return e.response?.data;
+      }
+    }
+  }
+
+  /// Read a file in a given MFS.
+  /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-read
+  Future<dynamic> read({String? dir = "/"}) async {
+    if (dir != null && !dir.startsWith("/")) dir = "/$dir";
+    var params = {
+      'arg': dir,
+      'offset': 0,
+      'count': 10000000,
+    };
+    try {
+      var response = await _ipfsService.post(
+          url: '$url/api/v0/files/read?',
+          queryParameters: params,
+          authorizationToken: authorizationToken,
+          responseType: ResponseType.bytes);
+      return response;
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      if (e.response != null) {
+        return e.response?.data;
+      }
+    }
+  }
+
+  /// Remove a file/dir
+  /// https://docs.ipfs.io/reference/http/api/#api-v0-files-rm
+  Future<dynamic> remove({String? dir = "/"}) async {
+    if (dir != null && !dir.startsWith("/")) dir = "/$dir";
+    var params = {
+      'arg': dir,
+    };
+    try {
+      var response = await _ipfsService.post(
+          url: '$url/api/v0/files/rm?',
           queryParameters: params,
           authorizationToken: authorizationToken);
       return response;
