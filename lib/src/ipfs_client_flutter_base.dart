@@ -35,7 +35,7 @@ class IpfsClient {
 
   /// List directories in the local mutable namespace.
   /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-ls
-  Future<dynamic> getAllDirectories({String? dir="/"}) async {
+  Future<dynamic> ls({String? dir = "/"}) async {
     if (dir != null && !dir.startsWith("/")) dir = "/$dir";
     var params = {
       'arg': dir,
@@ -46,6 +46,27 @@ class IpfsClient {
       var response = await _ipfsService.post(
           url: '$url/api/v0/files/ls?',
           queryParameters: params,
+          authorizationToken: authorizationToken);
+      return response;
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      if (e.response != null) {
+        return e.response?.data;
+      }
+    }
+  }
+
+  /// Display file status.
+  /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-stat
+  Future<dynamic> stat(
+      {String? dir = "/", Map<String, dynamic> params = const {}}) async {
+    if (dir != null && !dir.startsWith("/")) dir = "/$dir";
+    var _params = {'arg': dir, ...params};
+    try {
+      var response = await _ipfsService.post(
+          url: '$url/api/v0/files/stat?',
+          queryParameters: _params,
           authorizationToken: authorizationToken);
       return response;
     } on DioError catch (e) {

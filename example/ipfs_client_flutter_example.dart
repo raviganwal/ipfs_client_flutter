@@ -7,6 +7,6 @@ Future<void> main() async {
       dir: 'testpath3/Simulator.png',
       filePath: "[FILE_PATH]/Simulator.png",
       fileName: "Simulator.png");
-  var res2 = await ipfsClient.getAllDirectories(dir: "testDir");
+  var res2 = await ipfsClient.ls(dir: "testDir");
 
 }
