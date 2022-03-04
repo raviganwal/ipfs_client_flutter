@@ -108,7 +108,7 @@ class IpfsClient {
 
   /// Read a file in a given MFS.
   /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-read
-  Future<dynamic> read({ required String dir}) async {
+  Future<dynamic> read({required String dir}) async {
     _checkDir(dir);
     var params = {
       'arg': dir,
@@ -133,10 +133,12 @@ class IpfsClient {
 
   /// Remove a file/dir
   /// https://docs.ipfs.io/reference/http/api/#api-v0-files-rm
-  Future<dynamic> remove({required String dir}) async {
+  /// recursive [bool]: recursively remove directories. Required: no.
+  Future<dynamic> remove({required String dir, bool recursive = true}) async {
     _checkDir(dir);
     var params = {
       'arg': dir,
+      'recursive': recursive,
     };
     try {
       var response = await _ipfsService.post(
