@@ -1,6 +1,6 @@
 name: ipfs_client_flutter
 description: Built on top of HTTP RPC API.
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/raviganwal/ipfs_client_flutter.git
 
 environment:

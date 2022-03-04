@@ -1,5 +1,3 @@
-## 1.0.4
+## 1.0.5
 
-- implemented "stat" method and also renamed "ls" mehtod.
-- read
-- move a file
+- recursive: Recursively remove directories
