@@ -27,9 +27,9 @@ A flutter client library for the [IPFS HTTP API](https://docs.ipfs.io/reference/
 ```
   IpfsClient ipfsClient = IpfsClient();
 ```
-OR 
+OR
 ```
-  IpfsClient ipfsClient = IpfsClient(url: "http://127.0.0.1:5001"); 
+  IpfsClient ipfsClient = IpfsClient(url: "http://127.0.0.1:5001");
   // default is http://127.0.0.1:5001 so you don't need to pass url in case you are working on localhost
 ```
 
