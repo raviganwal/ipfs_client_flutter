@@ -38,4 +38,33 @@ If your app uses `Basic Authorization` then,
   IpfsClient ipfsClient =
       IpfsClient(url: "YOUR_SERVER_URL", authorizationToken: "YOUR_TOKEN");
 ```
+### How to make a directory in IPFS
+```
+  var response = await ipfsClient.mkdir(dir: 'myfolder');
+```
 
+### Get list of directories/files in a directory/subdirectory in the local mutable namespace.
+```
+  var response = await ipfsClient.ls(dir: 'myfolder');
+```
+If you dont pass any folder it will return all files and directories of root directory.
+
+### How to Write to a file
+```
+    var response = await ipfsClient.write(
+      dir: 'myfolder/sample.png',
+      filePath: "/Users/myuser/Desktop/sample.png",
+      fileName: "sample.png");
+```
+### How to read a file
+```
+  var response = await ipfsClient.read(dir: "myfolder/sample.png");
+```
+### How to remove a file
+```
+  var response = await ipfsClient.remove(dir: "myfolder/sample.png");
+```
+### How to move/rename a file
+```
+  var response = await ipfsClient.mv(oldPath: "myfolder/sample.png", newPath: "myfolder/MY_SAMPLE.png");
+```
