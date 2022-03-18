@@ -18,7 +18,7 @@ class IpfsClient {
       var response = await _ipfsService.postFile(
           url: '$url/api/v0/add?',
           formData: await FormData.fromMap(data),
-          queryParameters: {},
+          queryParameters: null,
           authorizationToken: authorizationToken);
       return response;
     } on DioError catch (e) {
