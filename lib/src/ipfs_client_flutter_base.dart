@@ -13,16 +13,12 @@ class IpfsClient {
 
   Future<dynamic> add(
       {required Map<String, dynamic> data}) async {
-    _checkDir(dir);
-    var params = {
-      'arg': dir,
-      'create': true,
-    };
+   
     try {
       var response = await _ipfsService.postFile(
           url: '$url/api/v0/add?',
           formData: await FormData.fromMap(data),
-          queryParameters: params,
+          queryParameters: {},
           authorizationToken: authorizationToken);
       return response;
     } on DioError catch (e) {
