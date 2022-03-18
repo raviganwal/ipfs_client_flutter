@@ -30,6 +30,23 @@ class IpfsClient {
     }
   }
   
+  Future<dynamic> cat({required String hash}) async {
+    try {
+      var response = await _ipfsService.post(
+          url: '$url/api/v0/cat?',
+          queryParameters: {"arg":hash},
+          authorizationToken: authorizationToken,
+          responseType: ResponseType.bytes);
+      return response;
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      if (e.response != null) {
+        return e.response?.data;
+      }
+    }
+  }
+  
   /// Make a directory in IPFS
   /// For more: https://docs.ipfs.io/reference/http/api/#api-v0-files-mkdir
   Future<dynamic> mkdir({required String dir}) async {
