@@ -12,7 +12,7 @@ class IpfsClient {
   IpfsClient({this.url = 'http://127.0.0.1:5001', this.authorizationToken});
 
   Future<dynamic> add(
-      {required Map data}) async {
+      {required Map<String, dynamic> data}) async {
     _checkDir(dir);
     var params = {
       'arg': dir,
